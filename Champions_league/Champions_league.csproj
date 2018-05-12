@@ -192,6 +192,7 @@
     <Compile Include="Controllers\AvgGoalsPerTeamController.cs" />
     <Compile Include="Controllers\AvgScorePerPlayerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MaxMotionScorePerPlayerController.cs" />
     <Compile Include="Controllers\PlayersByTeamController.cs" />
     <Compile Include="Controllers\PlayersController.cs" />
     <Compile Include="Controllers\TeamsController.cs" />
