@@ -9,33 +9,33 @@ using MySql.Data.MySqlClient;
 
 namespace Champions_league.Controllers
 {
-    public class AvgGoalsPerTeam
+    public class AvgBallTouchesPerTeamController : ApiController
     {
-        public double AvgGoals { get; set; }
-
-        public AvgGoalsPerTeam(double avgGoals)
+        public class AvgBallTouchesPerTeam
         {
-            AvgGoals = avgGoals;
-        }
-    }
+            public double AvgBallTouches { get; set; }
 
-    public class AvgGoalsPerTeamController : ApiController
-    {
+            public AvgBallTouchesPerTeam(double avgBallTouches)
+            {
+                AvgBallTouches = avgBallTouches;
+            }
+        }
+
         // GET api/<controller>
         public IEnumerable<string> Get()
         {
             return new string[] { "value1", "value2" };
         }
 
-        // GET api/avggoalsperteam/5
-        public AvgGoalsPerTeam Get(int id)
+        // GET api/avgballtouchesperteam/5
+        public AvgBallTouchesPerTeam Get(int id)
         {
-            AvgGoalsPerTeam answer = null;
+            AvgBallTouchesPerTeam answer = null;
 
             MySqlConnection conn = WebApiConfig.conn();
             MySqlCommand query = conn.CreateCommand();
 
-            query.CommandText = "SELECT AVG(a.GoalsPerDate) as AvgGoals from(SELECT SUM(GoalCount) as GoalsPerDate, TrainingTimestamp as dates FROM player_statistics where PlayerId in (select UserId FROM team_player where TeamId = " + id +") GROUP BY TrainingTimestamp) as a;";
+            query.CommandText = "SELECT AVG(a.BallTouchesPerPlayer) as AvgBallTouches from(SELECT PlayerId, SUM(BallTouches) as BallTouchesPerPlayer FROM player_statistics where PlayerId in (select UserId FROM team_player where TeamId = " + id + ") GROUP BY PlayerId) as a;";
 
             try
             {
@@ -48,9 +48,9 @@ namespace Champions_league.Controllers
 
             MySqlDataReader fetch_query = query.ExecuteReader();
 
-            if(fetch_query.Read())
-            {                 
-                answer = new AvgGoalsPerTeam(fetch_query.GetDouble("AvgGoals"));
+            if (fetch_query.Read())
+            {
+                answer = new AvgBallTouchesPerTeam(fetch_query.GetDouble("AvgBallTouches"));
             }
             else { } //Todo- handle not existing player
             fetch_query.Close();
