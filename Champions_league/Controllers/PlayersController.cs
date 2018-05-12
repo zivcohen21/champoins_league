@@ -76,9 +76,25 @@ namespace Champions_league.Controllers
         }
 
         // POST api/players
-        public void Post([FromBody]string value)
-        {            
+        public void Post([FromBody]Player player)
+        {
+            MySqlConnection conn = WebApiConfig.conn();
+            MySqlCommand query = conn.CreateCommand();
+            string mySqlInsert = "INSERT INTO player (Id, FirstName, LastName, PhoneNumber, ShirtNumber, DominantLeg) VALUES (" + player.Id + ",'" + player.FirstName + "','" + player.LastName + "','" + player.PhoneNumber + "'," + player.ShirtNumber + ",'" + player.DominantLeg + "')";
+           
+            try
+            {
+                conn.Open();
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+                throw;
+            }
 
+            query.CommandText = mySqlInsert;
+            query.ExecuteNonQuery();           
+           
+            conn.Close();
         }
 
         // PUT api/players/5
