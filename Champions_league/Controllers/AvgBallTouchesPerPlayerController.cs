@@ -8,22 +8,34 @@ using MySql.Data.MySqlClient;
 
 namespace Champions_league.Controllers
 {
-    public class UpdateTeamScoreController : ApiController
+    public class AvgBallTouchesPerPlayerController : ApiController
     {
+        public class AvgBallTouchesPerPlayer
+        {
+            public double AvgBallTouches { get; set; }
+
+            public AvgBallTouchesPerPlayer(double avgBallTouches)
+            {
+                AvgBallTouches = avgBallTouches;
+            }
+        }
+
         // GET api/<controller>
         public IEnumerable<string> Get()
         {
             return new string[] { "value1", "value2" };
         }
 
-        // GET api/updateteamscore/5
-        public void Get(int id)
+        // GET api/avgballtouchesperplayer/5
+        public AvgBallTouchesPerPlayer Get(int id)
         {
+            AvgBallTouchesPerPlayer answer = null;
+
             MySqlConnection conn = WebApiConfig.conn();
             MySqlCommand query = conn.CreateCommand();
-            string mySqlUpdate = "update team SET LeagueScore = (SELECT AVG(a.AccuratePassesPerPlayer) as AvgAccuratePasses from" +
-                "(SELECT PlayerId, SUM(AccuratePasses) as AccuratePassesPerPlayer FROM player_statistics where PlayerId in" + 
-                "(select UserId FROM team_player where TeamId =" + id + ") GROUP BY PlayerId) as a) WHERE Id = " + id;
+
+            query.CommandText = "SELECT AVG(BallTouches) as AvgBallTouches FROM player_statistics where PlayerId = " + id;
+
             try
             {
                 conn.Open();
@@ -33,10 +45,17 @@ namespace Champions_league.Controllers
                 throw;
             }
 
-            query.CommandText = mySqlUpdate;
-            query.ExecuteNonQuery();
+            MySqlDataReader fetch_query = query.ExecuteReader();
 
+            if (fetch_query.Read())
+            {
+                answer = new AvgBallTouchesPerPlayer(fetch_query.GetDouble("AvgBallTouches"));
+            }
+            else { } //Todo- handle not existing player
+            fetch_query.Close();
             conn.Close();
+
+            return answer;
         }
 
         // POST api/<controller>
