@@ -15,8 +15,6 @@ namespace Champions_league.Controllers
 {
     public class PlayersController : ApiController
     {
-        string table = "player";
-
         // GET api/players
         public List<Player> Get()
         {
@@ -24,7 +22,7 @@ namespace Champions_league.Controllers
 
             MySqlConnection conn = WebApiConfig.conn();
             MySqlCommand query = conn.CreateCommand();
-            query.CommandText = "SELECT * from " + table;
+            query.CommandText = "SELECT * from player";
 
             try
             {
@@ -53,7 +51,7 @@ namespace Champions_league.Controllers
             Player answer = null;
             MySqlConnection conn = WebApiConfig.conn();
             MySqlCommand query = conn.CreateCommand();
-            query.CommandText = "SELECT * from " + table + " where Id = " + id;
+            query.CommandText = "SELECT * from player where Id = " + id;
 
             try
             {
@@ -82,7 +80,7 @@ namespace Champions_league.Controllers
         {
             MySqlConnection conn = WebApiConfig.conn();
             MySqlCommand query = conn.CreateCommand();
-            string mySqlInsert = "INSERT INTO " + table + " (Id, FirstName, LastName, PhoneNumber, ShirtNumber, DominantLeg) VALUES (" + player.Id + ",'" + player.FirstName + "','" + player.LastName + "','" + player.PhoneNumber + "'," + player.ShirtNumber + ",'" + player.DominantLeg + "')";
+            string mySqlInsert = "INSERT INTO player (Id, FirstName, LastName, PhoneNumber, ShirtNumber, DominantLeg) VALUES (" + player.Id + ",'" + player.FirstName + "','" + player.LastName + "','" + player.PhoneNumber + "'," + player.ShirtNumber + ",'" + player.DominantLeg + "')";
            
             try
             {
@@ -104,7 +102,7 @@ namespace Champions_league.Controllers
         {
             MySqlConnection conn = WebApiConfig.conn();
             MySqlCommand query = conn.CreateCommand();
-            string mySqlUpdate = "UPDATE " + table + " SET FirstName='" + player.FirstName + "', LastName='" + player.LastName + "', PhoneNumber='" + player.PhoneNumber + "', ShirtNumber=" + player.ShirtNumber + ", DominantLeg='" + player.DominantLeg + "' WHERE Id=" + id;
+            string mySqlUpdate = "UPDATE player SET FirstName='" + player.FirstName + "', LastName='" + player.LastName + "', PhoneNumber='" + player.PhoneNumber + "', ShirtNumber=" + player.ShirtNumber + ", DominantLeg='" + player.DominantLeg + "' WHERE Id=" + id;
 
             try
             {
@@ -126,7 +124,7 @@ namespace Champions_league.Controllers
         {
             MySqlConnection conn = WebApiConfig.conn();
             MySqlCommand query = conn.CreateCommand();
-            string mySqlDelete = "DELETE FROM " + table + " WHERE Id='" + id + "'";
+            string mySqlDelete = "DELETE FROM player WHERE Id='" + id + "'";
             try
             {
                 conn.Open();
@@ -141,38 +139,5 @@ namespace Champions_league.Controllers
 
             conn.Close();
         }
-
-        // GET api/players/byteam/5
-
-        /*[System.Web.Mvc.Route("api/players/byteam/{id}")]
-        [System.Web.Http.HttpGet]
-        public List<Player> ByTeam(int id)
-        {
-            List<Player> answer = new List<Player>();
-
-            MySqlConnection conn = WebApiConfig.conn();
-            MySqlCommand query = conn.CreateCommand();
-            query.CommandText = "SELECT * FROM player where Id in (select UserId FROM team_player where TeamId =" + id + ")";
-
-            try
-            {
-                conn.Open();
-            }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
-            {
-                throw;
-            }
-
-            MySqlDataReader fetch_query = query.ExecuteReader();
-            while (fetch_query.Read())
-            {
-                Player player = new Player(fetch_query.GetInt32("Id"), fetch_query.GetString("FirstName"), fetch_query.GetString("LastName"), fetch_query.GetString("PhoneNumber"), fetch_query.GetInt32("ShirtNumber"), fetch_query.GetString("DominantLeg"));
-                answer.Add(player);
-            }
-            fetch_query.Close();
-            conn.Close();
-
-            return answer;
-        }*/
     }
 }

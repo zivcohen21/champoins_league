@@ -14,19 +14,14 @@ namespace Champions_league.Controllers
 
         public class TrainingDates
         {
-            public long Date {get; set;}
+            public string DateAsString {get; set;}
+            public long DateAsUnix { get; set; }
 
             public TrainingDates(long date)
             {
-                Date = date;
+                DateAsUnix = date;
+                DateAsString = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Local).AddSeconds(date).ToShortDateString();
             }
-        }
-
-
-    // GET api/<controller>
-    public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
         }
 
         // GET api/trainingdates/5
@@ -37,7 +32,7 @@ namespace Champions_league.Controllers
             MySqlConnection conn = WebApiConfig.conn();
             MySqlCommand query = conn.CreateCommand();
             
-            query.CommandText = "SELECT distinct TrainingTimestamp FROM player_statistics where PlayerId in (select UserId FROM team_player where TeamId = " + id + ") order by TrainingTimestamp;";
+            query.CommandText = "SELECT distinct TrainingTimestamp FROM player_statistics where PlayerId in (select UserId FROM team_player where TeamId = " + id + ") order by TrainingTimestamp";
 
             try
             {
@@ -59,21 +54,6 @@ namespace Champions_league.Controllers
             conn.Close();
 
             return answer;
-        }
-
-        // POST api/<controller>
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/<controller>/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/<controller>/5
-        public void Delete(int id)
-        {
         }
     }
 }

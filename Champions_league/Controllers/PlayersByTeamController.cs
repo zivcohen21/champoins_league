@@ -11,12 +11,6 @@ namespace Champions_league.Controllers
 {
     public class PlayersByTeamController : ApiController
     {
-        // GET api/playersbyteam
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
         // GET api/playersbyteam/5
         public List<Player> Get(int id)
         {
@@ -45,21 +39,6 @@ namespace Champions_league.Controllers
             conn.Close();
 
             return answer;
-        }
-
-        // POST api/<controller>
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/<controller>/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/<controller>/5
-        public void Delete(int id)
-        {
         }
     }
 }

@@ -11,7 +11,6 @@ namespace Champions_league.Controllers
 {
     public class TeamsController : ApiController
     {
-        string table = "team";
         // GET api/teams
         public List<Team> Get()
         {
@@ -19,7 +18,7 @@ namespace Champions_league.Controllers
 
             MySqlConnection conn = WebApiConfig.conn();
             MySqlCommand query = conn.CreateCommand();
-            query.CommandText = "SELECT * from " + table;
+            query.CommandText = "SELECT * from team";
 
             try
             {
@@ -48,7 +47,7 @@ namespace Champions_league.Controllers
             Team answer = null;
             MySqlConnection conn = WebApiConfig.conn();
             MySqlCommand query = conn.CreateCommand();
-            query.CommandText = "SELECT * from " + table + " where Id = " + id;
+            query.CommandText = "SELECT * from team where Id = " + id;
 
             try
             {
@@ -70,21 +69,6 @@ namespace Champions_league.Controllers
             conn.Close();
 
             return answer;
-        }
-
-        // POST api/<controller>
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/<controller>/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/<controller>/5
-        public void Delete(int id)
-        {
         }
     }
 }

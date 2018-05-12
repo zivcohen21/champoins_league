@@ -21,12 +21,6 @@ namespace Champions_league.Controllers
             }
         }
 
-        // GET api/<controller>
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
         // GET api/avgballtouchesperteam/5
         public AvgBallTouchesPerTeam Get(int id)
         {
@@ -35,7 +29,7 @@ namespace Champions_league.Controllers
             MySqlConnection conn = WebApiConfig.conn();
             MySqlCommand query = conn.CreateCommand();
 
-            query.CommandText = "SELECT AVG(a.BallTouchesPerPlayer) as AvgBallTouches from(SELECT PlayerId, SUM(BallTouches) as BallTouchesPerPlayer FROM player_statistics where PlayerId in (select UserId FROM team_player where TeamId = " + id + ") GROUP BY PlayerId) as a;";
+            query.CommandText = "SELECT AVG(a.BallTouchesPerPlayer) as AvgBallTouches from(SELECT PlayerId, SUM(BallTouches) as BallTouchesPerPlayer FROM player_statistics where PlayerId in (select UserId FROM team_player where TeamId = " + id + ") GROUP BY PlayerId) as a";
 
             try
             {
@@ -57,21 +51,6 @@ namespace Champions_league.Controllers
             conn.Close();
 
             return answer;
-        }
-
-        // POST api/<controller>
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/<controller>/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/<controller>/5
-        public void Delete(int id)
-        {
         }
     }
 }
