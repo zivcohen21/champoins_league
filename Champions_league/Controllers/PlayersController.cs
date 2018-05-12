@@ -13,9 +13,9 @@ using Champions_league.Models;
 namespace Champions_league.Controllers
 {
 
-    public class ValuesController : ApiController
+    public class PlayersController : ApiController
     {
-        // GET api/values
+        // GET api/players
         public List<Player> Get()
         {
             List<Player> answer = new List<Player>();
@@ -45,23 +45,48 @@ namespace Champions_league.Controllers
             return answer;
         }
 
-        // GET api/values/5
-        public string Get(int id)
+        // GET api/players/5
+        public Player Get(int id)
         {
-            return "value";
+            Player answer = null;
+            MySqlConnection conn = WebApiConfig.conn();
+            MySqlCommand query = conn.CreateCommand();
+            query.CommandText = "SELECT * from player where Id = " + id;
+
+            try
+            {
+                conn.Open();
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+                throw;
+            }
+
+            MySqlDataReader fetch_query = query.ExecuteReader();
+            if(fetch_query.Read())
+            {
+                answer = new Player(fetch_query.GetInt32("Id"), fetch_query.GetString("FirstName"), fetch_query.GetString("LastName"), fetch_query.GetString("PhoneNumber"), fetch_query.GetInt32("ShirtNumber"), fetch_query.GetString("DominantLeg"));
+            }   
+            else { } //Todo- handle not existing player
+          
+            fetch_query.Close();
+            conn.Close();
+
+            return answer;
         }
 
-        // POST api/values
+        // POST api/players
         public void Post([FromBody]string value)
-        {
+        {            
+
         }
 
-        // PUT api/values/5
+        // PUT api/players/5
         public void Put(int id, [FromBody]string value)
         {
         }
 
-        // DELETE api/values/5
+        // DELETE api/players/5
         public void Delete(int id)
         {
         }
