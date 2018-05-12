@@ -12,9 +12,10 @@ using Champions_league.Models;
 
 namespace Champions_league.Controllers
 {
-
     public class PlayersController : ApiController
     {
+        string table = "player";
+
         // GET api/players
         public List<Player> Get()
         {
@@ -22,7 +23,7 @@ namespace Champions_league.Controllers
 
             MySqlConnection conn = WebApiConfig.conn();
             MySqlCommand query = conn.CreateCommand();
-            query.CommandText = "SELECT * from player";
+            query.CommandText = "SELECT * from " + table;
 
             try
             {
@@ -51,7 +52,7 @@ namespace Champions_league.Controllers
             Player answer = null;
             MySqlConnection conn = WebApiConfig.conn();
             MySqlCommand query = conn.CreateCommand();
-            query.CommandText = "SELECT * from player where Id = " + id;
+            query.CommandText = "SELECT * from " + table + " where Id = " + id;
 
             try
             {
@@ -80,7 +81,7 @@ namespace Champions_league.Controllers
         {
             MySqlConnection conn = WebApiConfig.conn();
             MySqlCommand query = conn.CreateCommand();
-            string mySqlInsert = "INSERT INTO player (Id, FirstName, LastName, PhoneNumber, ShirtNumber, DominantLeg) VALUES (" + player.Id + ",'" + player.FirstName + "','" + player.LastName + "','" + player.PhoneNumber + "'," + player.ShirtNumber + ",'" + player.DominantLeg + "')";
+            string mySqlInsert = "INSERT INTO " + table + " (Id, FirstName, LastName, PhoneNumber, ShirtNumber, DominantLeg) VALUES (" + player.Id + ",'" + player.FirstName + "','" + player.LastName + "','" + player.PhoneNumber + "'," + player.ShirtNumber + ",'" + player.DominantLeg + "')";
            
             try
             {
@@ -98,13 +99,46 @@ namespace Champions_league.Controllers
         }
 
         // PUT api/players/5
-        public void Put(int id, [FromBody]string value)
+        public void Put(int id, [FromBody]Player player)
         {
+            MySqlConnection conn = WebApiConfig.conn();
+            MySqlCommand query = conn.CreateCommand();
+            string mySqlUpdate = "UPDATE " + table + " SET FirstName='" + player.FirstName + "', LastName='" + player.LastName + "', PhoneNumber='" + player.PhoneNumber + "', ShirtNumber=" + player.ShirtNumber + ", DominantLeg='" + player.DominantLeg + "' WHERE Id=" + id;
+
+            try
+            {
+                conn.Open();
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+                throw;
+            }
+
+            query.CommandText = mySqlUpdate;
+            query.ExecuteNonQuery();
+
+            conn.Close();
         }
 
         // DELETE api/players/5
         public void Delete(int id)
         {
+            MySqlConnection conn = WebApiConfig.conn();
+            MySqlCommand query = conn.CreateCommand();
+            string mySqlDelete = "DELETE FROM " + table + " WHERE Id='" + id + "'";
+            try
+            {
+                conn.Open();
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+                throw;
+            }
+
+            query.CommandText = mySqlDelete;
+            query.ExecuteNonQuery();
+
+            conn.Close();
         }
     }
 }
