@@ -23,10 +23,16 @@ namespace Champions_league
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
+                name: "PlayerByTeam",
+                routeTemplate: "api/players/byteam/{id}",
+                defaults: new { id = RouteParameter.Optional }
+            );
+
+            config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
-            );
+            );            
 
             var appXmlType = config.Formatters.XmlFormatter.SupportedMediaTypes.FirstOrDefault(t => t.MediaType == "application/xml");
             config.Formatters.XmlFormatter.SupportedMediaTypes.Remove(appXmlType);

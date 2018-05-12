@@ -8,6 +8,7 @@ using MySql.Data.MySqlClient;
 using System.Web.Mvc;
 using Newtonsoft.Json;
 using Champions_league.Models;
+using System.Web.Http;
 
 
 namespace Champions_league.Controllers
@@ -140,5 +141,38 @@ namespace Champions_league.Controllers
 
             conn.Close();
         }
+
+        // GET api/players/byteam/5
+
+        /*[System.Web.Mvc.Route("api/players/byteam/{id}")]
+        [System.Web.Http.HttpGet]
+        public List<Player> ByTeam(int id)
+        {
+            List<Player> answer = new List<Player>();
+
+            MySqlConnection conn = WebApiConfig.conn();
+            MySqlCommand query = conn.CreateCommand();
+            query.CommandText = "SELECT * FROM player where Id in (select UserId FROM team_player where TeamId =" + id + ")";
+
+            try
+            {
+                conn.Open();
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+                throw;
+            }
+
+            MySqlDataReader fetch_query = query.ExecuteReader();
+            while (fetch_query.Read())
+            {
+                Player player = new Player(fetch_query.GetInt32("Id"), fetch_query.GetString("FirstName"), fetch_query.GetString("LastName"), fetch_query.GetString("PhoneNumber"), fetch_query.GetInt32("ShirtNumber"), fetch_query.GetString("DominantLeg"));
+                answer.Add(player);
+            }
+            fetch_query.Close();
+            conn.Close();
+
+            return answer;
+        }*/
     }
 }
